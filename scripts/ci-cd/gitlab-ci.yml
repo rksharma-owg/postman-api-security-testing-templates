@@ -1,0 +1,11 @@
+
+api_security_tests:
+  image: node:20-alpine
+  script:
+    - npm install
+    - mkdir -p reports
+    - npx newman run collections/owasp-api-top10/owasp-api-top10-security.postman_collection.json -e environments/staging.postman_environment.json --reporters cli,json --reporter-json-export reports/newman.json
+  artifacts:
+    when: always
+    paths:
+      - reports/

@@ -1,0 +1,9 @@
+
+flowchart TD
+  A[Authorized tester] --> B[Select security template]
+  B --> C[Run against approved target]
+  C --> D{Expected defensive outcome?}
+  D -- Yes --> E[Document passing control]
+  D -- No --> F[Create finding]
+  F --> G[Remediate]
+  G --> C

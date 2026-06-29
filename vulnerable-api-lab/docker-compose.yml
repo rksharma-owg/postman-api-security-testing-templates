@@ -1,0 +1,10 @@
+
+services:
+  flask-api:
+    build: ./flask-api
+    ports:
+      - "8080:8080"
+  node-api:
+    build: ./node-api
+    ports:
+      - "8081:8081"

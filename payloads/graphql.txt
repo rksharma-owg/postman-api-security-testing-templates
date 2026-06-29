@@ -1,0 +1,3 @@
+{ __schema { types { name } } }
+query { viewer { teams { projects { issues { comments { id } } } } } }
+query { a:viewer{id} b:viewer{id} c:viewer{id} }

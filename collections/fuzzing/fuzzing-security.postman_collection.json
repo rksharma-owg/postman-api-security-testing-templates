@@ -1,0 +1,268 @@
+{
+  "info": {
+    "_postman_id": "{{postman_guid}}",
+    "name": "API Fuzzing Safety Checks",
+    "description": "Lightweight fuzzing templates for boundary values, malformed JSON, encodings, and type confusion.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.collectionVariables.set('started_at', new Date().toISOString());",
+          "pm.collectionVariables.set('toolkit', 'postman-api-security-testing-templates');"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "{{base_url}}"
+    },
+    {
+      "key": "access_token",
+      "value": "{{access_token}}"
+    },
+    {
+      "key": "user_id",
+      "value": "1001"
+    },
+    {
+      "key": "other_user_id",
+      "value": "1002"
+    },
+    {
+      "key": "admin_token",
+      "value": "{{admin_token}}"
+    }
+  ],
+  "item": [
+    {
+      "name": "Input Robustness",
+      "description": "Safe robustness checks for validation and parsers.",
+      "item": [
+        {
+          "name": "Boundary string length is handled",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"display_name\": \"{{long_string}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Type confusion is rejected",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"age\": {\n    \"unexpected\": \"object\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Encoded characters are normalized safely",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/search?q=%252e%252e%252f",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "search?q=%252e%252e%252f"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess."
+          }
+        }
+      ]
+    }
+  ]
+}

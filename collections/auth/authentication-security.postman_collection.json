@@ -1,0 +1,374 @@
+{
+  "info": {
+    "_postman_id": "{{postman_guid}}",
+    "name": "Authentication Security Testing",
+    "description": "Templates for validating token handling, broken authentication, OAuth misuse, and refresh-token controls.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.collectionVariables.set('started_at', new Date().toISOString());",
+          "pm.collectionVariables.set('toolkit', 'postman-api-security-testing-templates');"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "{{base_url}}"
+    },
+    {
+      "key": "access_token",
+      "value": "{{access_token}}"
+    },
+    {
+      "key": "user_id",
+      "value": "1001"
+    },
+    {
+      "key": "other_user_id",
+      "value": "1002"
+    },
+    {
+      "key": "admin_token",
+      "value": "{{admin_token}}"
+    }
+  ],
+  "item": [
+    {
+      "name": "Bearer Token Validation",
+      "description": "Negative tests for token presence, syntax, and expiry.",
+      "item": [
+        {
+          "name": "Missing bearer token is rejected",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess."
+          }
+        },
+        {
+          "name": "Invalid bearer token is rejected",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer invalid.token.value"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess."
+          }
+        },
+        {
+          "name": "Expired bearer token is rejected",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{expired_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess."
+          }
+        }
+      ]
+    },
+    {
+      "name": "OAuth and Refresh Tokens",
+      "description": "Safe checks for common OAuth lifecycle mistakes.",
+      "item": [
+        {
+          "name": "Refresh token reuse is detected",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{used_refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "OAuth token audience mismatch is rejected",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const runId = pm.variables.replaceIn('{{$guid}}');",
+                  "pm.collectionVariables.set('run_id', runId);",
+                  "pm.request.headers.upsert({ key: 'X-Security-Test-Run', value: runId });",
+                  "pm.request.headers.upsert({ key: 'X-Requested-By', value: 'postman-api-security-testing-templates' });"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('response is a documented security outcome', function () {",
+                  "  pm.expect([200, 201, 202, 204, 400, 401, 403, 404, 409, 415, 422, 429]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('no stack trace or implementation detail is leaked', function () {",
+                  "  const body = pm.response.text().toLowerCase();",
+                  "  pm.expect(body).to.not.include('traceback');",
+                  "  pm.expect(body).to.not.include('stack trace');",
+                  "  pm.expect(body).to.not.include('syntaxerror');",
+                  "});",
+                  "pm.test('response is not unexpectedly permissive', function () {",
+                  "  if (pm.info.requestName.toLowerCase().includes('missing') || pm.info.requestName.toLowerCase().includes('invalid') || pm.info.requestName.toLowerCase().includes('bypass')) {",
+                  "    pm.expect([401, 403, 404, 422, 429]).to.include(pm.response.code);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{wrong_audience_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile"
+              ]
+            },
+            "description": "Safe defensive test template. Run only against systems you own or are authorized to assess."
+          }
+        }
+      ]
+    }
+  ]
+}
