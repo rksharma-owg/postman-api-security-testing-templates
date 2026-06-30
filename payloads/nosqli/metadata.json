@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "category": "NoSQL Injection Validation",
+  "description": "Non-destructive operator and type-confusion canaries.",
+  "owasp_api_top10_map": [],
+  "owasp_web_top10_map": ["A03:2021 - Injection"],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "nosqli_safe_tests.payload",
+      "name": "nosqli_safe_tests",
+      "risk_level": "medium",
+      "example_count": 12,
+      "expected_secure_behavior": "Reject non-scalar input or treat operator syntax as literal data."
+    }
+  ]
+}

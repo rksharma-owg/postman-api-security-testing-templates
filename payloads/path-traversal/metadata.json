@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "category": "Path Traversal Validation",
+  "description": "Nonexistent-file path normalization canaries.",
+  "owasp_api_top10_map": [],
+  "owasp_web_top10_map": ["A01:2021 - Broken Access Control"],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "path_traversal_safe_tests.payload",
+      "name": "path_traversal_safe_tests",
+      "risk_level": "low",
+      "example_count": 12,
+      "expected_secure_behavior": "Reject traversal and keep all resolution inside the configured storage root."
+    }
+  ]
+}

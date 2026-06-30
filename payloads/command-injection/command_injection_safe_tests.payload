@@ -1,0 +1,20 @@
+---
+name: command_injection_safe_tests
+category: Command Injection Validation
+risk_level: medium
+owasp_web_top10_map: A03:2021 - Injection
+example_count: 12
+expected_secure_behavior: Reject metacharacters or pass the complete value as one inert argument.
+---
+; echo CMD_CANARY
+&& echo CMD_CANARY
+|| echo CMD_CANARY
+| echo CMD_CANARY
+$(printf CMD_CANARY)
+`printf CMD_CANARY`
+%3B%20echo%20CMD_CANARY
+%26%26%20echo%20CMD_CANARY
+CANARY%0Aecho%20CMD_CANARY
+'; echo CMD_CANARY; '
+"; printf CMD_CANARY; "
+CANARY_ARGUMENT --canary-flag

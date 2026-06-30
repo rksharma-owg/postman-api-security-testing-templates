@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "category": "JWT Validation",
+  "description": "Non-credential token parsing and claim-validation canaries.",
+  "owasp_api_top10_map": ["API2:2023 - Broken Authentication"],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "jwt_safe_tests.payload",
+      "name": "jwt_safe_tests",
+      "risk_level": "low",
+      "example_count": 12,
+      "expected_secure_behavior": "Reject with 401 or 403 without leaking verification details."
+    }
+  ]
+}

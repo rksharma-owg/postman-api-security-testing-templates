@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "category": "Command Injection Validation",
+  "description": "Non-destructive shell-separator canaries.",
+  "owasp_api_top10_map": [],
+  "owasp_web_top10_map": ["A03:2021 - Injection"],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "command_injection_safe_tests.payload",
+      "name": "command_injection_safe_tests",
+      "risk_level": "medium",
+      "example_count": 12,
+      "expected_secure_behavior": "Reject metacharacters or pass the complete value as one inert argument."
+    }
+  ]
+}

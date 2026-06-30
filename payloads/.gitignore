@@ -1,0 +1,15 @@
+# Local artifacts created while validating or searching the reviewed payload library
+*.pyc
+__pycache__/
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Payload search database cache
+payload-search-cache.yaml

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "category": "SSRF Validation",
+  "description": "Reserved-domain URL validation and parser canaries.",
+  "owasp_api_top10_map": ["API7:2023 - Server Side Request Forgery"],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "ssrf_safe_tests.payload",
+      "name": "ssrf_safe_tests",
+      "risk_level": "low",
+      "example_count": 12,
+      "expected_secure_behavior": "Reject untrusted destinations before DNS resolution or connection."
+    }
+  ]
+}

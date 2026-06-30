@@ -1,4 +1,0 @@
-<script>alert(1)</script>
-"><img src=x onerror=alert(1)>
-<svg><script>alert(1)</script></svg>
-javascript:alert(1)

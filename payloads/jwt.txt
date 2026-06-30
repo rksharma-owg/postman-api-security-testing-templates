@@ -1,4 +1,0 @@
-none-alg-token-placeholder
-expired-token-placeholder
-wrong-audience-token-placeholder
-tampered-role-claim-placeholder

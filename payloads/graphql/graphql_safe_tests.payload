@@ -1,0 +1,20 @@
+---
+name: graphql_safe_tests
+category: GraphQL Validation
+risk_level: low
+owasp_api_top10_map: API4:2023 and API8:2023
+example_count: 12
+expected_secure_behavior: Apply schema, authorization, depth, alias, and introspection policies consistently.
+---
+query CanaryTypename { __typename }
+query CanarySchema { __schema { queryType { name } } }
+query CanaryType { __type(name: "Query") { name } }
+query CanaryUnknown { canaryFieldThatMustNotExist }
+query CanaryAlias { first: __typename second: __typename }
+query CanaryDirective($include: Boolean! = false) { __typename @include(if: $include) }
+query CanaryFragment { ...CanaryFields } fragment CanaryFields on Query { __typename }
+query CanaryVariables($value: String!) { __typename }
+query CanaryDuplicate { a: __typename a: __typename }
+query CanaryDepth { __schema { queryType { fields { type { ofType { name } } } } } }
+[{"query":"query A { __typename }"},{"query":"query B { __typename }"}]
+query CanaryWhitespace{__typename}

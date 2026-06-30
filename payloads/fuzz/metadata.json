@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "category": "General Input Fuzzing",
+  "description": "Small type, encoding, and boundary-value corpus.",
+  "owasp_api_top10_map": [],
+  "example_count": 16,
+  "payloads": [
+    {
+      "filename": "fuzz_safe_tests.payload",
+      "name": "fuzz_safe_tests",
+      "risk_level": "low",
+      "example_count": 16,
+      "expected_secure_behavior": "Return a stable validation response without a crash or stack trace."
+    }
+  ]
+}

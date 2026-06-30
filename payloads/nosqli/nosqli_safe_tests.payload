@@ -1,0 +1,20 @@
+---
+name: nosqli_safe_tests
+category: NoSQL Injection Validation
+risk_level: medium
+owasp_web_top10_map: A03:2021 - Injection
+example_count: 12
+expected_secure_behavior: Reject non-scalar input or treat operator syntax as literal data.
+---
+{"username":{"$eq":"CANARY_USER_DOES_NOT_EXIST"}}
+{"username":{"$ne":"CANARY_USER_DOES_NOT_EXIST"}}
+{"username":{"$gt":"CANARY_MAX"}}
+{"username":{"$regex":"^CANARY_USER_DOES_NOT_EXIST$"}}
+{"username":{"$in":["CANARY_A","CANARY_B"]}}
+{"username":{"$nin":["CANARY_A","CANARY_B"]}}
+{"username":["CANARY_ARRAY_VALUE"]}
+{"username":{"unexpected":"CANARY_OBJECT_VALUE"}}
+{"username":null}
+{"username":true}
+{"username":0}
+{"profile.canary":"CANARY_DOTTED_KEY"}

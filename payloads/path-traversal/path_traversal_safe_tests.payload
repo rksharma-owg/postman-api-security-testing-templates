@@ -1,0 +1,20 @@
+---
+name: path_traversal_safe_tests
+category: Path Traversal Validation
+risk_level: low
+owasp_web_top10_map: A01:2021 - Broken Access Control
+example_count: 12
+expected_secure_behavior: Reject traversal and keep all resolution inside the configured storage root.
+---
+../API_SECURITY_CANARY_DOES_NOT_EXIST.txt
+../../API_SECURITY_CANARY_DOES_NOT_EXIST.txt
+..%2FAPI_SECURITY_CANARY_DOES_NOT_EXIST.txt
+%2E%2E%2FAPI_SECURITY_CANARY_DOES_NOT_EXIST.txt
+%252E%252E%252FAPI_SECURITY_CANARY_DOES_NOT_EXIST.txt
+..%5CAPI_SECURITY_CANARY_DOES_NOT_EXIST.txt
+%2E%2E%5CAPI_SECURITY_CANARY_DOES_NOT_EXIST.txt
+....//API_SECURITY_CANARY_DOES_NOT_EXIST.txt
+..;/API_SECURITY_CANARY_DOES_NOT_EXIST.txt
+.%2E/API_SECURITY_CANARY_DOES_NOT_EXIST.txt
+safe/../../API_SECURITY_CANARY_DOES_NOT_EXIST.txt
+safe%2F..%2F..%2FAPI_SECURITY_CANARY_DOES_NOT_EXIST.txt

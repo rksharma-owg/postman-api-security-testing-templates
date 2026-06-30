@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "category": "Cross-Site Scripting Validation",
+  "description": "Non-exfiltrating output-encoding canaries.",
+  "owasp_api_top10_map": [],
+  "owasp_web_top10_map": ["A03:2021 - Injection"],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "xss_safe_tests.payload",
+      "name": "xss_safe_tests",
+      "risk_level": "medium",
+      "example_count": 12,
+      "expected_secure_behavior": "Encode the value for its output context and execute no script."
+    }
+  ]
+}

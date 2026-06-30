@@ -1,0 +1,20 @@
+---
+name: xss_safe_tests
+category: Cross-Site Scripting Validation
+risk_level: medium
+owasp_web_top10_map: A03:2021 - Injection
+example_count: 12
+expected_secure_behavior: Encode the value for its output context and execute no script.
+---
+<script>console.log('XSS_CANARY')</script>
+"><script>console.log('XSS_CANARY')</script>
+<img src=x onerror="console.log('XSS_CANARY')">
+<svg onload="console.log('XSS_CANARY')"></svg>
+<details open ontoggle="console.log('XSS_CANARY')">
+<input autofocus onfocus="console.log('XSS_CANARY')">
+<a href="javascript:console.log('XSS_CANARY')">XSS_CANARY</a>
+<iframe srcdoc="<script>console.log('XSS_CANARY')</script>"></iframe>
+%3Cscript%3Econsole.log('XSS_CANARY')%3C%2Fscript%3E
+%253Cscript%253Econsole.log('XSS_CANARY')%253C%252Fscript%253E
+{{constructor.constructor('console.log("XSS_CANARY")')()}}
+</textarea><span data-canary="XSS_CANARY">CANARY</span>

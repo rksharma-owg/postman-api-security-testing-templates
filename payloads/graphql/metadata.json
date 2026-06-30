@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "category": "GraphQL Validation",
+  "description": "Bounded parser, introspection, alias, batching, and depth canaries.",
+  "owasp_api_top10_map": [
+    "API4:2023 - Unrestricted Resource Consumption",
+    "API8:2023 - Security Misconfiguration"
+  ],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "graphql_safe_tests.payload",
+      "name": "graphql_safe_tests",
+      "risk_level": "low",
+      "example_count": 12,
+      "expected_secure_behavior": "Apply schema, authorization, depth, alias, and introspection policies consistently."
+    }
+  ]
+}

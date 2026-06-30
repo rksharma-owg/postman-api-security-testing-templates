@@ -77,7 +77,7 @@ See `docs/` for setup, automation, JWT testing, GraphQL testing, and remediation
 
 ```text
 collections/             Postman collections grouped by security domain
-payloads/                Safe payload dictionaries for validation
+payloads/                Reviewed canary payloads (9 categories, 11+ examples each)
 environments/            Postman environment templates
 scripts/                 Newman, CI/CD, Docker, and workflow examples
 vulnerable-api-lab/      Local practice APIs

@@ -1,0 +1,20 @@
+---
+name: ssrf_safe_tests
+category: SSRF Validation
+risk_level: low
+owasp_api_top10_map: API7:2023 - Server Side Request Forgery
+example_count: 12
+expected_secure_behavior: Reject untrusted destinations before DNS resolution or connection.
+---
+http://ssrf-canary.invalid/
+https://ssrf-canary.invalid/
+http://ssrf-canary.invalid:80/
+https://ssrf-canary.invalid:443/
+http://user@ssrf-canary.invalid/
+http://allowed.example@ssrf-canary.invalid/
+http://ssrf-canary.invalid/redirect
+http://subdomain.ssrf-canary.invalid/canary
+http:%2F%2Fssrf-canary.invalid%2F
+https://ssrf-canary.invalid/%2e%2e/canary
+//ssrf-canary.invalid/canary
+HTTPS://SSRF-CANARY.INVALID/CANARY

@@ -1,0 +1,21 @@
+---
+name: jwt_safe_tests
+category: JWT Validation
+risk_level: low
+owasp_api_top10_map: API2:2023 - Broken Authentication
+example_count: 12
+expected_secure_behavior: Reject with 401 or 403 without leaking verification details.
+---
+# One deliberately invalid token value per line.
+Bearer
+Bearer null
+Bearer undefined
+Bearer not-a-jwt
+Bearer abc.def
+Bearer abc.def.ghi
+Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJjYW5hcnktdXNlciJ9.
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYW5hcnktdXNlciIsImV4cCI6MX0.invalid
+Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3cm9uZy1hdWRpZW5jZS5pbnZhbGlkIn0.invalid
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2lzc3Vlci5pbnZhbGlkIn0.invalid
+bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYW5hcnkifQ.invalid
+Bearer    eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYW5hcnkifQ.invalid

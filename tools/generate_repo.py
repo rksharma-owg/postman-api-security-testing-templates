@@ -338,18 +338,9 @@ pm.test('retry guidance is present when rate limited', function () {
 for path, data in collections.items():
     write_json(path, data)
 
-payloads = {
-    "payloads/sql-injection.txt": "'\n\" \n' OR '1'='1\nadmin'--\n1 OR 1=1\n') OR ('1'='1\n",
-    "payloads/xss.txt": "<script>alert(1)</script>\n\"><img src=x onerror=alert(1)>\n<svg><script>alert(1)</script></svg>\njavascript:alert(1)\n",
-    "payloads/jwt.txt": "none-alg-token-placeholder\nexpired-token-placeholder\nwrong-audience-token-placeholder\ntampered-role-claim-placeholder\n",
-    "payloads/fuzz.txt": "\"\"\nnull\ntrue\n[]\n{}\n0\n-1\n999999999999\n%00\n%252e%252e%252f\n",
-    "payloads/graphql.txt": "{ __schema { types { name } } }\nquery { viewer { teams { projects { issues { comments { id } } } } } }\nquery { a:viewer{id} b:viewer{id} c:viewer{id} }\n",
-    "payloads/path-traversal.txt": "../etc/passwd\n..%2f..%2fetc%2fpasswd\n%252e%252e%252f\n....//....//etc/passwd\n",
-    "payloads/ssrf.txt": "http://127.0.0.1/\nhttp://localhost/\nhttp://169.254.169.254/latest/meta-data/\nhttp://[::1]/\n",
-    "payloads/command-injection.txt": "; whoami\n&& id\n| hostname\n`whoami`\n$(id)\n",
-}
-for path, content in payloads.items():
-    write(path, content)
+# The payload library is maintained as reviewed source under payloads/<category>/.
+# Do not generate or overwrite it here. Run `npm run validate:payloads` to verify
+# its indexes, front matter, safety constraints, and minimum example counts.
 
 env_values = [
     {"key": "base_url", "value": "http://localhost:8080", "type": "default"},
@@ -463,7 +454,7 @@ See `docs/` for setup, automation, JWT testing, GraphQL testing, and remediation
 
 ```text
 collections/             Postman collections grouped by security domain
-payloads/                Safe payload dictionaries for validation
+payloads/                Reviewed canary payloads (9 categories, 11+ examples each)
 environments/            Postman environment templates
 scripts/                 Newman, CI/CD, Docker, and workflow examples
 vulnerable-api-lab/      Local practice APIs
@@ -900,7 +891,5 @@ for directory in ["collections/auth", "collections/authorization", "collections/
     write(f"{directory}/README.md", f"# {directory.split('/')[-1].replace('-', ' ').title()} Collections\n\nImport the Postman collection in this folder and run it with an appropriate environment. These templates are for authorized defensive testing only.\n")
 
 write("scripts/README.md", "# Scripts\n\nAutomation helpers for Newman, CI/CD systems, GitHub Actions, and Docker-based execution.\n")
-write("payloads/README.md", "# Payloads\n\nSafe educational payload lists for validating API input handling. Review and scope payloads before use in any environment.\n")
 write("environments/README.md", "# Environments\n\nPostman environments for local lab, staging, and production-safe smoke testing. Replace placeholder secrets in Postman or your CI secret store.\n")
 write("vulnerable-api-lab/README.md", "# Vulnerable API Lab\n\nIntentionally vulnerable Flask and Node.js APIs for local defensive learning. Do not deploy these services to the internet.\n")
-

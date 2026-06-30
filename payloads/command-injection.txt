@@ -1,5 +1,0 @@
-; whoami
-&& id
-| hostname
-`whoami`
-$(id)

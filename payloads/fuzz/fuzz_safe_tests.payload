@@ -1,0 +1,24 @@
+---
+name: fuzz_safe_tests
+category: General Input Fuzzing
+risk_level: low
+owasp_api_top10_map: context-dependent
+example_count: 16
+expected_secure_behavior: Return a stable validation response without a crash or stack trace.
+---
+""
+" "
+null
+true
+false
+[]
+{}
+0
+-1
+1.7976931348623157e+308
+999999999999999999999999999999
+%00
+%EF%BF%BD
+CANARY_Åß中🙂
+CANARY_CANARY_CANARY_CANARY_CANARY_CANARY_CANARY_CANARY
+%252e%252e%252fCANARY

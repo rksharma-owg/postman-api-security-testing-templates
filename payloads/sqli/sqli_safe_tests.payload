@@ -1,0 +1,20 @@
+---
+name: sqli_safe_tests
+category: SQL Injection Validation
+risk_level: medium
+owasp_web_top10_map: A03:2021 - Injection
+example_count: 12
+expected_secure_behavior: Treat input as data and return no database error details.
+---
+'
+"
+CANARY'
+CANARY"
+' AND 'CANARY'='CANARY
+' AND 'CANARY'='NOT_CANARY
+' OR 'CANARY'='CANARY
+' OR 'CANARY'='NOT_CANARY
+CANARY'--
+CANARY'/*
+1 AND 1=1
+1 AND 1=2

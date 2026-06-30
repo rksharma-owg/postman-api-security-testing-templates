@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "category": "SQL Injection Validation",
+  "description": "Non-destructive parser and boolean-response canaries.",
+  "owasp_api_top10_map": [],
+  "owasp_web_top10_map": ["A03:2021 - Injection"],
+  "example_count": 12,
+  "payloads": [
+    {
+      "filename": "sqli_safe_tests.payload",
+      "name": "sqli_safe_tests",
+      "risk_level": "medium",
+      "example_count": 12,
+      "expected_secure_behavior": "Treat input as data and return no database error details."
+    }
+  ]
+}
